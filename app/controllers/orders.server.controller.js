@@ -14,19 +14,29 @@ var mongoose = require('mongoose'),
 exports.create = function(req, res) {
 	var group = req.group;
 
-	var order = new Order({
-		qty: req.body.qty,
-		user: req.body.user._id,
-		userDisplayName: req.body.user.displayName
-	});
+	if (req.body._id) {
+		Order.findByIdAndUpdate(req.body._id, {$set: {qty: req.body.qty}}, {}, function(err, doc) {
+			if (err) {
+				return res.status(400).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			}
+		});
+	} else {
+		var order = new Order({
+			qty: req.body.qty,
+			user: req.body.user._id,
+			userDisplayName: req.body.user.displayName
+		});
 
-	order.save(function(err) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		}
-	});
+		order.save(function(err) {
+			if (err) {
+				return res.status(400).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			}
+		});
+	}
 
 	group.orders.addToSet(order._id);
 	group.save(function(err) {

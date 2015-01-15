@@ -20,7 +20,23 @@ angular.module('groups')
 	.factory('Orders', ['$resource',
 		function($resource) {
 			return $resource(
-				'groups/:groupId/order',
+				'groups/:groupId/order/:orderId',
+				{
+					groupId: '@groupId',
+					orderId: '@_id'
+				},
+				{
+					update: {
+						method: 'PUT'
+					}
+				}
+			);
+		}
+	])
+	.factory('GroupComments', ['$resource',
+		function($resource) {
+			return $resource(
+				'groups/:groupId/comment',
 				{
 					groupId: '@groupId'
 				}

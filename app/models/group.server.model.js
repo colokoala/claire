@@ -7,6 +7,23 @@ var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 
 /**
+ * Group Comment
+ */
+var GroupCommentSchema = new Schema({
+	userName: {
+		type: String,
+		required: 'A group comment must have a user name'
+	},
+	content: {
+		type: String
+	},
+	time: {
+		type: Date,
+		default: Date.now
+	}
+});
+
+/**
  * Group Schema
  */
 var GroupSchema = new Schema({
@@ -58,8 +75,9 @@ var GroupSchema = new Schema({
 	orders: [{
 		type: Schema.ObjectId,
 		ref: 'Order'
-	}]
+	}],
+	comments: [GroupCommentSchema]
 });
 
-
+mongoose.model('GroupComment', GroupCommentSchema);
 mongoose.model('Group', GroupSchema);

@@ -18,6 +18,9 @@ module.exports = function(app) {
 	app.route('/groups/:groupId/order')
 		.post(users.requiresLogin, orders.create);
 
+	app.route('/groups/:groupId/comment')
+		.post(users.requiresLogin, groups.addComment);
+
 	// Finish by binding the Group middleware
 	app.param('groupId', groups.groupByID);
 };

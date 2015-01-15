@@ -1,9 +1,13 @@
 'use strict';
 
 // Groups controller
-angular.module('groups').controller('GroupsController', ['$scope', '$stateParams', '$location', 'Authentication',
-	'Groups', 'Orders', '$modal',
-	function($scope, $stateParams, $location, Authentication, Groups, Orders, $modal) {
+angular.module('groups').filter('formatText', function () {
+	return function (text) {
+		if (text !== undefined) return text.replace(/\n/g, '<br />');
+	};
+}).controller('GroupsController', ['$scope', '$stateParams', '$location', 'Authentication',
+	'Groups', 'Orders', 'GroupComments', '$modal',
+	function($scope, $stateParams, $location, Authentication, Groups, Orders, GroupComments, $modal) {
 		$scope.authentication = Authentication;
 
 		// Create new Group
@@ -101,22 +105,25 @@ angular.module('groups').controller('GroupsController', ['$scope', '$stateParams
 		// Place an order to the group
 		$scope.placeOrder = function() {
 
-			var order = new Orders(
-				{
-					groupId: this.group._id,
-					qty: this.orderQty,
-					userDisplayName: this.authentication.user.displayName,
-					user: this.authentication.user
-				}
-			);
-
-			this.group.orders.push({
+			var o = {
 				groupId: this.group._id,
 				qty: this.orderQty,
 				userDisplayName: this.authentication.user.displayName,
 				user: this.authentication.user
-			});
+			};
+			var i = 0;
+			for (; i < this.group.orders.length; i++) {
+				if (this.group.orders[i].user == this.authentication.user._id) {
+					this.group.orders[i].qty = o.qty;
+					o = this.group.orders[i];
+					break;
+				}
+			}
+			if (i === this.group.orders.length) {
+				this.group.orders.push(o);
+			}
 
+			var order = new Orders(o);
 			order.$save();
 		};
 
@@ -135,6 +142,21 @@ angular.module('groups').controller('GroupsController', ['$scope', '$stateParams
 				qty += $scope.group.orders[i].qty;
 			}
 			return qty;
+		};
+
+		// Submit a comment
+		$scope.submitComment = function() {
+			var comment = {
+				userName: this.authentication.user.displayName,
+				content: this.newComment,
+				groupId: this.group._id,
+				time: Date.now()
+			};
+			if (!this.group.comments) {
+				this.group.comments = [];
+			}
+			this.group.comments.push(comment);
+			GroupComments.save(comment);
 		};
 	}
 ]);

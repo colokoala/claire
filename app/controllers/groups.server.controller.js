@@ -8,6 +8,7 @@ var mongoose = require('mongoose'),
 	Group = mongoose.model('Group'),
 	Order = mongoose.model('Order'),
 	User = mongoose.model('User'),
+	GroupComment = mongoose.model('GroupComment'),
 	_ = require('lodash');
 
 /**
@@ -83,6 +84,24 @@ exports.list = function(req, res) {
 			});
 		} else {
 			res.jsonp(groups);
+		}
+	});
+};
+
+/**
+ * Add a comment to group
+ */
+exports.addComment = function(req, res) {
+	var comment = {
+		userName: req.body.userName,
+		content: req.body.content
+	};
+
+	Group.findByIdAndUpdate(req.body.groupId, {$push: {comments: comment}}, {}, function(err, doc) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
 		}
 	});
 };

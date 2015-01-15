@@ -2,17 +2,17 @@
 	<h1 class="page-header" data-ng-bind="group.name"></h1>
 	<div class="row">
 		<div class="col-sm-8">
-			<p><b>Price:</b> <span style="color:red">{{group.price | currency}} / {{group.unit}}</span></p>
-			<p><b>Pick Up Address:</b> {{group.address}}</p>
-			<p><b>Minimum Purchase Quantity:</b> {{group.minQty}}</p>
+			<p><strong>Price:</strong> <span style="color:red">{{group.price | currency}} / {{group.unit}}</span></p>
+			<address><strong>Pick Up Address:</strong> {{group.address}}</address>
+			<p><strong>Minimum Order Quantity:</strong> {{group.minQty}}</p>
 		</div>
 		<div class="col-sm-4">
-			<input data-ng-model="orderQty" type="number" min="1" class="form-control" placeholder="Enter Quantity" required/>
-			<button type="button" class="btn btn-success" ng-click="showBuyDialog()">Buy</button>
+			<input data-ng-model="orderQty" type="number" min="1" class="form-control" placeholder="Enter quantity {{group.minQty}} or more." required/>
+			<button type="button" class="btn btn-success" ng-click="showBuyDialog()">Order</button>
 		</div>
 	</div>
-	<p>The group will close when the total order quantity reaches <b>{{group.targetQty}}</b>.</p>
-	<p>Expiration Time: {{group.expiration}}</p>
+	<p><strong>Target Quantity:</strong> {{group.targetQty}}</p>
+	<p><strong>Expiration Time:</strong> {{group.expiration | date}}</p>
 	<p id="view-group-desc" data-ng-bind="group.desc"></p>
 
 	<table class="table table-hover table-striped">
@@ -35,15 +35,46 @@
 			<td><b>{{getTotalOrderQty() * group.price | currency}}</b></td>
 		</tr>
 	</table>
+
+	<div class="panel panel-default" >
+		<div class="panel-heading">Comments
+			<a type="button" class="pull-right"
+			   herf data-ng-click="isCommentPanelCollapsed = !isCommentPanelCollapsed">
+				<strong>{{ isCommentPanelCollapsed ? 'Show' : 'Hide' }}</strong>
+			</a>
+		</div>
+		<div class="panel-body" collapse="isCommentPanelCollapsed">
+
+			<div class="list-group">
+				<div class="list-group-item" class="row">
+				<form>
+					<div class="form-group" >
+						<textarea class="form-control" rows="3" placeholder="Write your comment" data-ng-model="newComment"></textarea>
+					</div>
+					<button type="submit" class="btn btn-default" data-ng-click="submitComment()" ng-disabled="!newComment || 0 === newComment.length">Submit</button>
+				</form>
+				</div>
+				<div class="list-group-item" class="row" ng-repeat="c in group.comments | orderBy : time : reverse">
+					<div class="row">
+						<p><span class="text-info">{{c.userName}}</span> <span class="text-muted">on {{c.time | date:'medium'}}</span></p>
+						<span ng-bind-html="c.content | formatText"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+
 	<div>
-	<small>
-		<em class="text-muted">
-			Posted on
-			<span data-ng-bind="group.created | date:'mediumDate'"></span>
-			by
-			<span data-ng-bind="group.user.displayName"></span>
-		</em>
-	</small>
+		<small>
+			<em class="text-muted">
+				Posted on
+				<span data-ng-bind="group.created | date:'mediumDate'"></span>
+				by
+				<span data-ng-bind="group.user.displayName"></span>
+			</em>
+		</small>
 	</div>
 	<div class="pull-right">
 		<a class="btn btn-primary" href="/#!/groups/{{group._id}}/edit"

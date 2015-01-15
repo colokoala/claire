@@ -1,13 +1,12 @@
 <div class="modal-header">
-    <h3>Confirm</h3>
+    <h3>Order Confirmation</h3>
 </div>
 <div class="modal-body">
-    <p><b>Are you sure you want to buy {{orderQty}} unit(s)?</b></p>
-    <input class="form-inline" placeholder="Quantity" />
+    <p><b>Please confirm the order.</b></p>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-primary"
+    <button type="button" class="btn btn-warning"
             data-ng-click="cancel()">Cancel</button>
-    <button class="btn btn-primary"
+    <button class="btn btn-success"
             data-ng-click="ok();">Place Order</button>
 </div>
