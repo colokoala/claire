@@ -113,7 +113,7 @@ angular.module('groups').filter('formatText', function () {
 			};
 			var i = 0;
 			for (; i < this.group.orders.length; i++) {
-				if (this.group.orders[i].user == this.authentication.user._id) {
+				if (this.group.orders[i].user === this.authentication.user._id) {
 					this.group.orders[i].qty = o.qty;
 					o = this.group.orders[i];
 					o.groupId = this.group._id;
