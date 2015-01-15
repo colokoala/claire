@@ -116,15 +116,16 @@ angular.module('groups').filter('formatText', function () {
 				if (this.group.orders[i].user == this.authentication.user._id) {
 					this.group.orders[i].qty = o.qty;
 					o = this.group.orders[i];
-					break;
+					o.groupId = this.group._id;
+					Orders.update(o);
+					return;
 				}
 			}
 			if (i === this.group.orders.length) {
 				this.group.orders.push(o);
 			}
 
-			var order = new Orders(o);
-			order.$save();
+			Orders.save(o);
 		};
 
 		$scope.isMyOrder = function(order) {
@@ -157,7 +158,9 @@ angular.module('groups').filter('formatText', function () {
 			}
 			this.group.comments.push(comment);
 			GroupComments.save(comment);
+			this.newComment = '';
 		};
+
 	}
 ]);
 

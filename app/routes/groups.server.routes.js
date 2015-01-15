@@ -15,12 +15,16 @@ module.exports = function(app) {
 		.put(users.requiresLogin, groups.hasAuthorization, groups.update)
 		.delete(users.requiresLogin, groups.hasAuthorization, groups.delete);
 
-	app.route('/groups/:groupId/order')
-		.post(users.requiresLogin, orders.create);
-
 	app.route('/groups/:groupId/comment')
 		.post(users.requiresLogin, groups.addComment);
 
+	app.route('/groups/:groupId/orders')
+		.post(users.requiresLogin, orders.create);
+
+	app.route('/groups/:groupId/orders/:orderId')
+		.put(users.requiresLogin, orders.hasAuthorization, orders.update);
+
 	// Finish by binding the Group middleware
 	app.param('groupId', groups.groupByID);
+	app.param('orderId', orders.orderByID);
 };

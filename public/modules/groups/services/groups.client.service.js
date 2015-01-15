@@ -20,7 +20,7 @@ angular.module('groups')
 	.factory('Orders', ['$resource',
 		function($resource) {
 			return $resource(
-				'groups/:groupId/order/:orderId',
+				'groups/:groupId/orders/:orderId',
 				{
 					groupId: '@groupId',
 					orderId: '@_id'

@@ -131,12 +131,12 @@ exports.list = function(req, res) {
  * order middleware
  */
 exports.orderByID = function(req, res, next, id) { 
-	//order.findById(id).populate('user', 'displayName').exec(function(err, order) {
-	//	if (err) return next(err);
-	//	if (! order) return next(new Error('Failed to load order ' + id));
-	//	req.order = order ;
-	//	next();
-	//});
+	Order.findById(id).populate('user', 'displayName').exec(function(err, order) {
+		if (err) return next(err);
+		if (! order) return next(new Error('Failed to load order ' + id));
+		req.order = order ;
+		next();
+	});
 };
 
 /**

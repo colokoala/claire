@@ -1,4 +1,4 @@
-<section data-ng-controller="GroupsController">
+<section data-ng-controller="GroupsController" xmlns="http://www.w3.org/1999/html">
     <div class="page-header">
         <h1>New Group</h1>
     </div>
@@ -46,7 +46,8 @@
                 <div class="form-group">
                     <label class="control-label" for="expiration">Expiration Time</label>
                     <div class="controls">
-                        <input name="expiration" data-ng-model="expiration" id="expiration" class="form-control" placeholder="Expiration Time" />
+                        <input name="expiration" type="date" data-ng-model="expiration" id="expiration"
+                               class="form-control" placeholder="Expiration Time" />
                     </div>
                 </div>
                 <div class="form-group">

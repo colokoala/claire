@@ -56,7 +56,7 @@
 				</div>
 				<div class="list-group-item" class="row" ng-repeat="c in group.comments | orderBy : time : reverse">
 					<div class="row">
-						<p><span class="text-info">{{c.userName}}</span> <span class="text-muted">on {{c.time | date:'medium'}}</span></p>
+						<p><span class="text-info">{{c.userName}}</span> <em class="text-muted">on {{c.time | date:'medium'}}</em></p>
 						<span ng-bind-html="c.content | formatText"></span>
 					</div>
 				</div>
